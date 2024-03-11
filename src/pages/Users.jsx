@@ -3,10 +3,24 @@ import axios from "axios";
 axios.defaults.withCredentials = true;  //this is very important
 import AuthContext from "../context/AuthContext";
 
+let firstRender = true;
+
 const Users = () => {
   // const [user, setUser] = useState("")  //here we will be removing this because now we are using the context to store this globaly
-  
   const {user, setUser} = useContext(AuthContext)
+
+  const refreshToken = async () => {
+    
+    const res = await axios.get("http://localhost:5000/api/refresh", {
+      withCredentials: true,
+    });
+
+    const data = await res.data;
+    
+    setUser(data.message);
+    
+    return data;
+  }
   
   const sendRequest = async () => {
     const res = await axios.get("http://localhost:5000/api/user", {
@@ -17,8 +31,16 @@ const Users = () => {
   };
 
   useEffect(() => {
+    if (firstRender) {
+      firstRender = false;
       sendRequest();
-  }, []);
+    }
+    let interval = setInterval(() => {
+      refreshToken();
+    }, 1000 * 29);
+
+    return () => clearInterval(interval);
+  }, [user]);
 
   return (
     <div className="flex justify-center items-center h-[80vh]">
