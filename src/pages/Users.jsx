@@ -11,7 +11,7 @@ const Users = () => {
 
   const refreshToken = async () => {
     
-    const res = await axios.get("http://localhost:5000/api/refresh", {
+    const res = await axios.get("https://finalauthbackend.onrender.com/api/refresh", {
       withCredentials: true,
     });
 
@@ -23,7 +23,7 @@ const Users = () => {
   }
   
   const sendRequest = async () => {
-    const res = await axios.get("http://localhost:5000/api/user", {
+    const res = await axios.get("https://finalauthbackend.onrender.com/api/user", {
       withCredentials: true,  // here we have given the option to this get method withCredentials as true
     });
     const data = await res.data;
